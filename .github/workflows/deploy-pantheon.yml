@@ -18,8 +18,6 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      # ── Lo mismo que hiciste en local ──────────────────
-
       - name: npm ci
         run: npm ci
 
@@ -28,8 +26,6 @@ jobs:
 
       - name: build-storybook
         run: npm run build-storybook
-
-      # ── SSH para conectar con Pantheon ─────────────────
 
       - uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -41,7 +37,27 @@ jobs:
             codeserver.dev.${{ secrets.PANTHEON_SITE_ID }}.drush.in \
             >> ~/.ssh/known_hosts
 
-      # ── Clonar repo Pantheon (igual que hiciste tú) ────
+      # ── GUARDIA DE SEGURIDAD ────────────────────────────────
+      - name: Instalar Terminus
+        run: |
+          curl -O https://raw.githubusercontent.com/pantheon-systems/terminus-installer/master/builds/installer.phar
+          php installer.phar install
+
+      - name: ✅ Verificar site prueba-storybook1
+        env:
+          PANTHEON_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+        run: |
+          terminus auth:login --machine-token="$PANTHEON_MACHINE_TOKEN"
+
+          SITE=$(terminus site:info prueba-storybook1 --field=name 2>/dev/null || echo "NOT_FOUND")
+
+          if [ "$SITE" != "prueba-storybook1" ]; then
+            echo "❌ ABORTADO: site incorrecto ($SITE). No se hará push."
+            exit 1
+          fi
+
+          echo "✅ Site confirmado: $SITE"
+      # ────────────────────────────────────────────────────────
 
       - name: Clonar repo Pantheon
         run: |
@@ -49,27 +65,10 @@ jobs:
             ssh://codeserver.dev.${{ secrets.PANTHEON_SITE_ID }}@codeserver.dev.${{ secrets.PANTHEON_SITE_ID }}.drush.in:2222/~/repository.git \
             pantheon-repo
 
-      # ── Copiar build (igual que el cp que hiciste) ─────
-
       - name: Copiar Storybook al repo Pantheon
         run: |
           rm -rf pantheon-repo/web/storybook-static
           cp -r storybook-static pantheon-repo/web/storybook-static
-
-      - name: ✅ Verificar que el site es prueba-storybook1
-        env:
-          PANTHEON_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
-        run: |
-          terminus auth:login --machine-token="$PANTHEON_MACHINE_TOKEN"
-          
-          SITE=$(terminus site:info prueba-storybook1 --field=name 2>/dev/null || echo "NOT_FOUND")
-          
-          if [ "$SITE" != "prueba-storybook1" ]; then
-            echo "❌ ABORTADO: el site no es prueba-storybook1 (encontrado: $SITE)"
-            exit 1
-          fi
-          
-          echo "✅ Site verificado: $SITE — continuando deploy"
 
       - name: Push a Pantheon
         working-directory: pantheon-repo
@@ -78,18 +77,10 @@ jobs:
           git config user.name "GitHub Actions"
           git add web/storybook-static
           git commit -m "deploy: storybook [$(date +'%Y-%m-%d %H:%M UTC')]" || true
-          git push origin main
-
-      # ── Limpiar cache (igual que el terminus que hiciste)
-
-      - name: Instalar Terminus
-        run: |
-          curl -O https://raw.githubusercontent.com/pantheon-systems/terminus-installer/master/builds/installer.phar
-          php installer.phar install
+          git push origin main        # ← corregido de master a main
 
       - name: Clear cache Pantheon
         env:
           PANTHEON_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
         run: |
-          terminus auth:login --machine-token="$PANTHEON_MACHINE_TOKEN"
-          terminus env:clear-cache ${{ secrets.PANTHEON_SITE_NAME }}.dev
+          terminus env:clear-cache prueba-storybook1.dev
