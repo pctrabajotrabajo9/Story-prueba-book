@@ -40,8 +40,13 @@ jobs:
       # ── GUARDIA DE SEGURIDAD ────────────────────────────────
       - name: Instalar Terminus
         run: |
-          curl -O https://raw.githubusercontent.com/pantheon-systems/terminus-installer/master/builds/installer.phar
-          php installer.phar install
+          TERMINUS_VERSION=$(curl -s https://api.github.com/repos/pantheon-systems/terminus/releases/latest \
+            | grep '"tag_name"' | cut -d'"' -f4)
+          curl -L "https://github.com/pantheon-systems/terminus/releases/download/${TERMINUS_VERSION}/terminus.phar" \
+            --output terminus.phar
+          chmod +x terminus.phar
+          sudo mv terminus.phar /usr/local/bin/terminus
+          terminus --version
 
       - name: ✅ Verificar site prueba-storybook1
         env:
