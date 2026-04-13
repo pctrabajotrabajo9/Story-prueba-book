@@ -56,7 +56,20 @@ jobs:
           rm -rf pantheon-repo/web/storybook-static
           cp -r storybook-static pantheon-repo/web/storybook-static
 
-      # ── Commit y push (igual que el git push que hiciste)
+      - name: ✅ Verificar que el site es prueba-storybook1
+        env:
+          PANTHEON_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+        run: |
+          terminus auth:login --machine-token="$PANTHEON_MACHINE_TOKEN"
+          
+          SITE=$(terminus site:info prueba-storybook1 --field=name 2>/dev/null || echo "NOT_FOUND")
+          
+          if [ "$SITE" != "prueba-storybook1" ]; then
+            echo "❌ ABORTADO: el site no es prueba-storybook1 (encontrado: $SITE)"
+            exit 1
+          fi
+          
+          echo "✅ Site verificado: $SITE — continuando deploy"
 
       - name: Push a Pantheon
         working-directory: pantheon-repo
@@ -65,7 +78,7 @@ jobs:
           git config user.name "GitHub Actions"
           git add web/storybook-static
           git commit -m "deploy: storybook [$(date +'%Y-%m-%d %H:%M UTC')]" || true
-          git push origin master
+          git push origin main
 
       # ── Limpiar cache (igual que el terminus que hiciste)
 
