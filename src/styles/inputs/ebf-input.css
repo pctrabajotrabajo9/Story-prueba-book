@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "./input.css";
+
+@theme {
+  /* ── EBF Brand Colors ─────────────────────── */
+  --brand-color-1: #0f298f;   /* Primary   — deep blue */
+  --brand-color-2: #80bc00;   /* Secondary — green     */
+  --brand-color-3: #fde234;   /* Accent    — yellow    */
+}

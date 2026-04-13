@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Tipografías ─────────────────────────────────────── */
+  --font-open-sans:  'Open Sans', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+
+  /* ── Colores base (sobreescritos por cada marca) ─────── */
+  --brand-color-1: #004B87;
+  --brand-color-2: #0EA5E9;
+  --brand-color-3: #F59E0B;
+  --color-error:   #DC2626;
+
+  /* ── Escalas de color generadas ─────────────────────── */
+  --color-primary-50:  color-mix(in srgb, var(--brand-color-1) 10%, white);
+  --color-primary-100: color-mix(in srgb, var(--brand-color-1) 20%, white);
+  --color-primary-200: color-mix(in srgb, var(--brand-color-1) 35%, white);
+  --color-primary-300: color-mix(in srgb, var(--brand-color-1) 50%, white);
+  --color-primary-400: color-mix(in srgb, var(--brand-color-1) 65%, white);
+  --color-primary-500: var(--brand-color-1);
+  --color-primary-600: color-mix(in srgb, var(--brand-color-1) 85%, black);
+  --color-primary-700: color-mix(in srgb, var(--brand-color-1) 70%, black);
+  --color-primary-800: color-mix(in srgb, var(--brand-color-1) 55%, black);
+  --color-primary-900: color-mix(in srgb, var(--brand-color-1) 40%, black);
+  --color-primary-950: color-mix(in srgb, var(--brand-color-1) 25%, black);
+
+  --color-secondary-50:  color-mix(in srgb, var(--brand-color-2) 10%, white);
+  --color-secondary-100: color-mix(in srgb, var(--brand-color-2) 20%, white);
+  --color-secondary-500: var(--brand-color-2);
+  --color-secondary-700: color-mix(in srgb, var(--brand-color-2) 70%, black);
+
+  --color-accent-50:  color-mix(in srgb, var(--brand-color-3) 10%, white);
+  --color-accent-500: var(--brand-color-3);
+  --color-accent-700: color-mix(in srgb, var(--brand-color-3) 70%, black);
+
+  /* ── Espaciado base ──────────────────────────────────── */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* ── Radios ──────────────────────────────────────────── */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-full: 9999px;
+}

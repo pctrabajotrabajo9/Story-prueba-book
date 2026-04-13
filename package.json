@@ -1,0 +1,31 @@
+{
+  "name": "beo-storybook-test",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "storybook": "concurrently \"npm run watch:tailwind\" \"npm run watch:storybook\"",
+    "watch:storybook": "storybook dev -p 6008",
+    "watch:tailwind": "node src/utils/tailwind-watch.mjs",
+    "watch:styles": "node src/utils/styles-watch.mjs",
+    "build:tailwind": "node src/utils/tailwind-build.mjs",
+    "build:styles": "node src/utils/styles-build.mjs",
+    "build:components": "node src/utils/build-components.mjs",
+    "build:dist": "npm run build:tailwind && npm run build:components",
+    "build-storybook": "storybook build -o storybook-static"
+  },
+  "dependencies": {
+    "lit": "^3.3.2"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/web-components-vite": "^8.6.12",
+    "@tailwindcss/postcss": "^4.2.2",
+    "concurrently": "^9.1.2",
+    "cssnano": "^7.0.7",
+    "postcss": "^8.5.3",
+    "storybook": "^8.6.12",
+    "tailwindcss": "^4.2.2",
+    "typescript": "~5.7.3",
+    "vite": "^6.3.4"
+  }
+}

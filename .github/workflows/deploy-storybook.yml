@@ -1,0 +1,71 @@
+name: Deploy Storybook to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main          # Cambia si tu rama principal se llama 'master' u otra
+  workflow_dispatch:  # Permite disparar manualmente desde la UI de GitHub
+
+# Permisos necesarios para publicar en GitHub Pages
+permissions:
+  contents: read
+  pages:    write
+  id-token: write
+
+# Solo un deploy a la vez; cancela el anterior si hay uno en curso
+concurrency:
+  group:              "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Storybook
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout del código
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Configurar Node.js (misma versión que en desarrollo)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. Instalar dependencias (usa lockfile si existe)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Compilar Tailwind → genera beo-tailwind.css + cc-button.lit.ts
+      #    Este paso es crítico: sin él Storybook no puede importar los estilos
+      - name: Build Tailwind CSS
+        run: npm run build:tailwind
+
+      # 5. Compilar Storybook estático
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      # 6. Preparar el artefacto para GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: storybook-static   # Carpeta de salida de build-storybook
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

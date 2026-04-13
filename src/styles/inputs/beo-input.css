@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "./input.css";
+
+@theme {
+  /* ── BEO Brand Colors ─────────────────────── */
+  --brand-color-1: #004B87;   /* Primary   — dark blue  */
+  --brand-color-2: #0EA5E9;   /* Secondary — light blue */
+  --brand-color-3: #F59E0B;   /* Accent    — orange     */
+}
