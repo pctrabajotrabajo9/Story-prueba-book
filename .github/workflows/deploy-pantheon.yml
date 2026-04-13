@@ -69,6 +69,8 @@ jobs:
           git clone \
             ssh://codeserver.dev.${{ secrets.PANTHEON_SITE_ID }}@codeserver.dev.${{ secrets.PANTHEON_SITE_ID }}.drush.in:2222/~/repository.git \
             pantheon-repo
+          cd pantheon-repo
+          git checkout master
 
       - name: Copiar Storybook al repo Pantheon
         run: |
@@ -78,11 +80,11 @@ jobs:
       - name: Push a Pantheon
         working-directory: pantheon-repo
         run: |
-          git config user.email "ci@tuproyecto.com"
+          git config user.email "ci@prueba-storybook1.com"
           git config user.name "GitHub Actions"
           git add web/storybook-static
           git commit -m "deploy: storybook [$(date +'%Y-%m-%d %H:%M UTC')]" || true
-          git push origin main        # ← corregido de master a main
+          git push origin master        # ← corregido de master a main
 
       - name: Clear cache Pantheon
         env:

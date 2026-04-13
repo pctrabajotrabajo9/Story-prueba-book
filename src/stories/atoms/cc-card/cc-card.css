@@ -1,0 +1,93 @@
+/*
+ * cc-card.css — Tailwind source
+ * DO NOT import directly.
+ * Edit here → tailwind-watch.mjs regenerates cc-card.lit.ts
+ */
+
+/* ── Host ─────────────────────────────────────────────────── */
+:host {
+  @apply block;
+}
+
+/* ── Base card ────────────────────────────────────────────── */
+.card {
+  @apply flex flex-col overflow-hidden rounded-xl
+         border border-transparent
+         bg-white
+         transition-shadow duration-200;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 0.08);
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px 0 rgb(0 0 0 / 0.12);
+}
+
+/* ── Variantes ────────────────────────────────────────────── */
+.card--variant-default {
+  @apply border-gray-200 bg-white;
+}
+
+.card--variant-primary {
+  @apply border-primary-200 bg-primary-50;
+}
+
+.card--variant-outlined {
+  @apply border-primary-500 bg-white;
+  box-shadow: none;
+}
+
+/* ── Imagen ───────────────────────────────────────────────── */
+.card__image-wrapper {
+  @apply w-full overflow-hidden;
+  height: 180px;
+}
+
+.card__image {
+  @apply w-full h-full object-cover;
+}
+
+/* ── Cuerpo ───────────────────────────────────────────────── */
+.card__body {
+  @apply flex flex-col flex-1 gap-3 p-5;
+}
+
+/* ── Badge ────────────────────────────────────────────────── */
+.card__badge {
+  @apply self-start px-2.5 py-1 rounded-full text-xs font-semibold
+         bg-secondary-500 text-white;
+}
+
+.card--variant-primary .card__badge {
+  @apply bg-primary-500;
+}
+
+/* ── Heading ──────────────────────────────────────────────── */
+.card__heading {
+  @apply text-base font-semibold leading-snug text-gray-900;
+}
+
+.card--variant-primary .card__heading {
+  @apply text-primary-700;
+}
+
+/* ── Descripción ──────────────────────────────────────────── */
+.card__description {
+  @apply text-sm leading-relaxed text-gray-500 flex-1;
+}
+
+/* ── Acción ───────────────────────────────────────────────── */
+.card__action {
+  @apply mt-auto pt-2;
+}
+
+.card__action-btn {
+  @apply inline-flex items-center gap-1.5
+         text-sm font-semibold text-primary-500
+         hover:text-primary-700
+         transition-colors duration-150
+         cursor-pointer bg-transparent border-none p-0;
+}
+
+.card__action-btn::after {
+  content: '→';
+}
