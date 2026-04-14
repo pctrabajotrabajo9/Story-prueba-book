@@ -1,0 +1,57 @@
+/*
+ * cc-alert.css — Tailwind source
+ * DO NOT import directly.
+ * Edit here → tailwind-watch.mjs regenerates cc-alert.lit.ts
+ */
+
+:host {
+  @apply block;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+.alert {
+  @apply flex items-start gap-3 rounded-lg border px-4 py-3;
+}
+
+/* ── Tipos ────────────────────────────────────────────────── */
+.alert--type-info {
+  @apply border-blue-200 bg-blue-50 text-blue-800;
+}
+.alert--type-success {
+  @apply border-green-200 bg-green-50 text-green-800;
+}
+.alert--type-warning {
+  @apply border-yellow-200 bg-yellow-50 text-yellow-800;
+}
+.alert--type-error {
+  @apply border-red-200 bg-red-50 text-red-800;
+}
+
+/* ── Icono ────────────────────────────────────────────────── */
+.alert__icon {
+  @apply shrink-0 text-lg leading-none mt-0.5;
+}
+
+/* ── Contenido ────────────────────────────────────────────── */
+.alert__content {
+  @apply flex flex-col gap-0.5 flex-1;
+}
+
+.alert__title {
+  @apply text-sm font-semibold leading-snug;
+}
+
+.alert__message {
+  @apply text-sm leading-relaxed;
+}
+
+/* ── Botón cerrar ─────────────────────────────────────────── */
+.alert__close {
+  @apply shrink-0 ml-auto cursor-pointer border-none bg-transparent
+         text-current opacity-60 hover:opacity-100
+         transition-opacity duration-150 text-lg leading-none p-0;
+}

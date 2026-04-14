@@ -9,13 +9,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: npm ci
@@ -37,7 +39,6 @@ jobs:
             codeserver.dev.${{ secrets.PANTHEON_SITE_ID }}.drush.in \
             >> ~/.ssh/known_hosts
 
-      # ── GUARDIA DE SEGURIDAD ────────────────────────────────
       - name: Instalar Terminus
         run: |
           TERMINUS_VERSION=$(curl -s https://api.github.com/repos/pantheon-systems/terminus/releases/latest \
@@ -62,7 +63,6 @@ jobs:
           fi
 
           echo "✅ Site confirmado: $SITE"
-      # ────────────────────────────────────────────────────────
 
       - name: Clonar repo Pantheon
         run: |
@@ -84,7 +84,7 @@ jobs:
           git config user.name "GitHub Actions"
           git add web/storybook-static
           git commit -m "deploy: storybook [$(date +'%Y-%m-%d %H:%M UTC')]" || true
-          git push origin master        # ← corregido de master a main
+          git push origin master
 
       - name: Clear cache Pantheon
         env:
