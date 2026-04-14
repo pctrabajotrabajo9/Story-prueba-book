@@ -125,3 +125,13 @@ export const AllTypes: Story = {
     </div>
   `,
 };
+
+export const LongMessage: Story = {
+  name: '⚡ Mensaje largo',
+  args: {
+    type:    'error',
+    title:   'Error de validación',
+    message: 'El campo "Correo electrónico" es obligatorio y debe contener una dirección válida. Por favor, corrige este error para continuar.',
+    dismissible: true,
+  },
+};
