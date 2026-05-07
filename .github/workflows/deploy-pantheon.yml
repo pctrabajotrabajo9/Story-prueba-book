@@ -87,8 +87,35 @@ jobs:
           git commit -m "deploy: storybook [$(date +'%Y-%m-%d %H:%M UTC')]" || true
           git push origin master
 
-      - name: Clear cache Pantheon
+      - name: 🧹 Clear cache multidev (Enterprise-Grade Resiliency)
         env:
           PANTHEON_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
         run: |
-          terminus env:clear-cache prueba-storybook1.dev
+          terminus auth:login --machine-token="$PANTHEON_MACHINE_TOKEN"
+
+          terminus env:wake ${{ secrets.PANTHEON_SITE_NAME }}.dev || echo "El entorno ya estaba activo o el wake no devolvió 200, continuando..."
+
+          sleep 10
+
+          MAX_RETRIES=3
+          RETRY_COUNT=0
+          SUCCESS=false
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            echo "Intento de limpieza de caché vía Drush ($(($RETRY_COUNT + 1))/$MAX_RETRIES)..."
+            
+            if terminus drush ${{ secrets.PANTHEON_SITE_NAME }}.dev -- cache:rebuild; then
+              echo "✅ Caché y contenedor de servicios reconstruidos con éxito."
+              SUCCESS=true
+              break
+            else
+              echo "⚠️ Fallo al ejecutar drush cr. Esperando 15 segundos antes del próximo intento..."
+              RETRY_COUNT=$(($RETRY_COUNT + 1))
+              sleep 15
+            fi
+          done
+
+          if [ "$SUCCESS" = false ]; then
+            echo "❌ ERROR CRÍTICO: No se pudo reconstruir la caché de Drupal en Pantheon tras $MAX_RETRIES intentos."
+            exit 1
+          fi

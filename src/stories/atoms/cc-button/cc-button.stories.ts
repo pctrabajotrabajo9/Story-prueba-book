@@ -228,3 +228,35 @@ export const AllVariants: Story = {
     </div>
   `,
 };
+
+export const AllSizes: Story = {
+  name: '⚡ Todos los tamaños',
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Vista rápida de todas las combinaciones de tamaño × variante.',
+      },
+    },
+  },
+  render: () => html`
+    <div style="display:flex;flex-direction:column;gap:1.5rem;padding:1.5rem;font-family:sans-serif;">
+      ${[ButtonSize.Small, ButtonSize.Medium, ButtonSize.Large].map(
+        (size) => html`
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span style="font-size:0.875rem;font-weight:600;text-transform:uppercase;color:#6b7280;">${size}</span>
+            ${[ButtonVariant.Primary, ButtonVariant.Secondary, ButtonVariant.Outline, ButtonVariant.Ghost].map(
+              (variant) => html`
+                <cc-button
+                  label="${variant} / ${size}"
+                  variant="${variant}"
+                  size="${size}"
+                ></cc-button>
+              `
+            )}
+          </div>
+        `
+      )}
+    </div>
+  `,
+};
