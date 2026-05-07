@@ -135,3 +135,12 @@ export const LongMessage: Story = {
     dismissible: true,
   },
 };
+
+export const NoTitle: Story = {
+  name: '⚡ Sin título',
+  args: {
+    type:    'warning',
+    message: 'Tu contraseña expirará en 3 días. Considera actualizarla pronto.',
+    dismissible: true,
+  },
+};
